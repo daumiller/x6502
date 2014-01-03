@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "twd.h"
+#include "cpu.h"
+
+#include "devices/convid.h"
+
+void usage(int exitCode)
+{
+  printf("usage: twd [OPTION] file\n");
+  printf("option: -b base address\n");
+  exit(exitCode);
+}
+
+int main(int argc, char **argv)
+{
+  if(argc < 2) usage(-1);
+
+  int baseAddr = 0;
+  for(int i=1; i<argc; i++)
+    if(strcmp(argv[i], "-b") == 0)
+      baseAddr = atoi(argv[i+1]);
+
+  FILE *fin = fopen(argv[argc-1], "rb");
+  cpu *m = cpuCreate();
+  int b; int i = baseAddr;
+  while((b = fgetc(fin)) != EOF)
+    m->ram[i++] = (u8)b;
+  m->pc = baseAddr;
+
+  deviceStart_convid();
+  cpuStart(m);
+
+  return 0;
+}

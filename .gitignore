@@ -1,4 +1,9 @@
-testasm
 x6502
-debug-names.h
-a.o65
+x6502.debug
+cc65
+cl65
+xa
+boot.rom
+hda.img
+object/*
+machine/debug-names.h

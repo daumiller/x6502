@@ -1,0 +1,98 @@
+#define IOC_CMD_ADDR    $0200
+#define IOC_RES_ADDR    $0201
+#define IOC_CMD_COUNT   $01
+#define IO_CMD_RESET    $00
+#define IO_CMD_CLASS    $01
+#define IO_CMD_VID      $02
+#define IO_CMD_PID      $03
+#define IO_CMD_NAME     $04
+#define IO_CMD_USER     $10
+#define CONVID_CMD_PUTC $10
+#define PUSHALL   pha : txa : pha : tya : pha
+#define POPALL    pla : tay : pla : tax : pla
+
+
+init:
+  jmp $0300
+  .dsb $02FD
+
+startup:
+  /* initialize stack pointer     */
+  ldx #$FF
+  txs
+  /* initialize zero-page entries */
+  ; zp[0|1] == USER
+  lda #$00 : sta $0000
+  lda #$00 : sta $0001
+  ; zp[2|3] == IO_PAGE
+  lda #$00 : sta $0002
+  lda #$02 : sta $0003
+  ; zp[4|5] == CONVID
+  lda #$00 : sta $0004
+  lda #$02 : sta $0005
+
+findConvid:
+  ; ioController(IOC_CMD_COUNT)
+  lda #IOC_CMD_COUNT
+  sta IOC_CMD_ADDR
+  lda #0
+  pha
+  cmp IOC_RES_ADDR
+  bne L0000 ; work-around 'halt' out of beq range...
+  jmp halt
+L0000:
+  pla
+  cmp IOC_RES_ADDR
+  bne L0001 : jmp halt ; "beq halt"
+L0001:
+  adc #1
+  ; addr = IO_PAGE + ((a+1)*16)
+  asl : asl : asl : asl
+  tay
+  lsr : lsr : lsr : lsr
+  pha
+  lda IO_CMD_NAME
+  sta ($02),Y
+  iny : lda ($00),Y : cmp 'C' : bne L0000
+  iny : lda ($00),Y : cmp 'O' : bne L0000
+  iny : lda ($00),Y : cmp 'N' : bne L0000
+  iny : lda ($00),Y : cmp 'V' : bne L0000
+  iny : lda ($00),Y : cmp 'I' : bne L0000
+  iny : lda ($00),Y : cmp 'D' : bne L0000
+  iny : lda ($00),Y : cmp #$0 : bne L0000
+foundConvid:
+  pla
+  asl : asl : asl : asl
+  sta $0004                  ; store convid ptr in zp[4|5]
+  lda #<strHello : sta $0000
+  lda #>strHello : sta $0001
+  jsr printString
+  jmp halt
+
+printString:
+  ; zp[0|1] holds string location
+  ; zp[4|5] holds convid location
+  PUSHALL
+  ldy #0
+printStringLoop:
+  lda ($00),Y
+  cmp #0 : beq printStringComplete
+  iny : tax : tya : pha : txa ; increment y + push y (preserving a)
+  ldy #1 : sta ($04),Y
+  ldy #0 : lda #CONVID_CMD_PUTC : sta ($04),Y
+  pla : tay
+  jmp printStringLoop:
+printStringComplete:
+  POPALL
+  rts
+
+strHello:
+  .asc "Hello Boot World!"
+  .byt $0A
+  .byt $00
+
+halt:
+  .byt $FF
+
+; jsr
+; rts
