@@ -2,10 +2,10 @@ CC      = clang
 PERL    = perl
 COPTS   = -std=c99 -O3 -Wall
 CLIBS   = -lpthread
-SOURCES = machine/x6502.c machine/cpu.c machine/io.c machine/debug.c machine/main.c
+SOURCES = machine/x6502.c machine/cpu.c machine/io.c machine/debug.c main.c
 HEADERS = machine/x6502.h machine/cpu.h machine/io.h machine/debug.h machine/functions.h machine/debug-names.h machine/opcodes.h
 MAINOBJ = object/cpu.o object/debug.o object/io.o object/main.o object/x6502.o
-DEVOBJ  = object/convid.o object/hdimg.o
+DEVOBJ  = object/convid.o object/hdimg.o object/keyboard.o
 TARGET  = x6502
 
 all: release
@@ -26,14 +26,21 @@ convid: object/convid.o
 object/convid.o : devices/convid.c devices/convid.h machine/io.h
 	$(CC) $(COPTS) -c devices/convid.c -o object/convid.o
 
-convid: object/hdimg.o
+hdimg: object/hdimg.o
 object/hdimg.o : devices/hdimg.c devices/hdimg.h devices/ioClassStorage.h machine/io.h
 	$(CC) $(COPTS) -c devices/hdimg.c -o object/hdimg.o
+
+keyboard: object/keyboard.o
+object/keyboard.o : devices/keyboard.c devices/keyboard.h machine/io.h
+	$(CC) $(COPTS) -c devices/keyboard.c -o object/keyboard.o
 
 bootRom: boot/bootRom.s boot/boot.h
 	./xa -bt0 boot/bootRom.s -o boot.rom
 bootDisk: boot/bootDisk.s boot/boot.h
 	./xa -bt0 boot/bootDisk.s -o hda.img
+
+object/main.o : main.c
+	$(CC) $(COPTS) -c $^ -o $@
 
 object/%.o : machine/%.c
 	$(CC) $(COPTS) -c $^ -o $@

@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "x6502.h"
-#include "cpu.h"
+#include "machine/x6502.h"
+#include "machine/cpu.h"
 
-#include "../devices/convid.h"
-#include "../devices/hdimg.h"
+#include "devices/convid.h"
+#include "devices/hdimg.h"
+#include "devices/keyboard.h"
 
 int main(int argc, char **argv)
 {
@@ -19,12 +20,11 @@ int main(int argc, char **argv)
   m->pc = baseAddr;
   fclose(fin);
 
-  deviceStart_convid();
-
   fin = fopen("hda.img", "r+b");
   deviceStart_hdimg(fin);
+  deviceStart_convid();
+  deviceStart_keyboard();
 
   cpuStart(m);
-
   return 0;
 }
