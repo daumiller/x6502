@@ -8,6 +8,7 @@
 #include "devices/convid.h"
 #include "devices/hdimg.h"
 #include "devices/keyboard.h"
+#include "devices/banking.h"
 
 int main(int argc, char **argv)
 {
@@ -24,6 +25,7 @@ int main(int argc, char **argv)
   deviceStart_hdimg(fin);
   deviceStart_convid();
   deviceStart_keyboard();
+  deviceStart_banking(m, 0xFF); // consume 16MiB...
 
   cpuStart(m);
   return 0;

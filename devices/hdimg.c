@@ -78,6 +78,7 @@ static void sysCommand(ioDevice *device, u8 data)
       device->data[7] = 'G';
       device->data[8] = 'E';
       device->data[9] = 0x00;
+      break;
   }
 }
 

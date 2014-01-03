@@ -74,6 +74,7 @@ static void sysCommand(u8 data)
       convid.data[4] = 'I';
       convid.data[5] = 'D';
       convid.data[6] = 0x00;
+      break;
   }
 }
 
