@@ -38,9 +38,6 @@ bootDisk: boot/bootDisk.s
 object/%.o : machine/%.c
 	$(CC) $(COPTS) -c $^ -o $@
 
-%.xa : %.s
-	./xa -bd 0 $^ -o $@
-
 clean:
 	rm -f machine/debug-names.h
 	rm -f $(MAINOBJ)
