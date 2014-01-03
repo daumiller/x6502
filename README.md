@@ -22,20 +22,8 @@
 Building and running x6502
 
     To build x6502, just run `make' in the project root. You
-    will need clang and Python installed. To use gcc, change
-    the $(CC) var in the Makefile. No libraries beyond POSIX
-    libc are used. This will produce the x6502 binary.
-
-    x6502 takes the compiled 6502 object file as an
-    argument, and runs it until it encounters an EXT
-    instruction (EXT instructions are an extension to 6502
-    bytecode, see below). You can use any 6502 assembler to
-    compile to 6502 bytecode; `xa' is one that is bundled
-    with Debian-based distros. Note that, by default, x6502
-    loads code in at address 0x00; you therefore need to
-    either tell your assembler that that's the base address
-    for the text section of your binary or override the
-    default load address using the `-b' flag of x6502.
+    will need clang and Perl installed. No libraries beyond
+    POSIX libc are used. This will produce the x6502 binary.
 
     If you want to compile a version of x6502 that dumps
     machine state after every instruction, run `make debug'
@@ -51,33 +39,9 @@ Extensions to the 6502 instruction set
                       current state of the emulator
         EXT (0xFF):   stops the emulator and exits
 
-    Both of these are defined as macros in `stdlib/stdio.s'.
     To disable these extensions, compile with
     -DDISABLE_EXTENSIONS (right now, this can be done by
     adding that flag to the Makefile).
-
-I/O memory map:
-
-    There are only two I/O devices right now: a character
-    input device and a character output device. Convenience
-    constants and macros for all I/O devices are defined in
-    `stdlib/stdio.s' for use in user programs. Add stdlib to
-    your include path and then add `#include <stdio.s>' to
-    your program to use these constants.
-    
-    The character output device is mapped to FF00. Any
-    character written to FF00 is immediately echoed to the
-    terminal.
-
-    The character input device is mapped to FF01. When a
-    character is available on standard in, an interrupt is
-    raised and FF01 is set to the character that was
-    received. Note that one character is delivered per
-    interrupt; if the user types ``abc'', they will get
-    three interrupts one after the other.
-
-    A commented example of how to use the I/O capabilities
-    of x6502 is provided in sample_programs/echo.s.
 
 Reading the source
 
@@ -87,25 +51,10 @@ Reading the source
     flags) as well as the `cpu' struct, which is used pretty
     much everywhere.
     
-    `emu.c' is where the interesting stuff happens; this is
+    `cpu.c' is where the interesting stuff happens; this is
     the main loop of the emulator where opcodes are decoded
     as dispatched. It also handles interrupts and calls out
-    to I/O handlers.
-
-    The code for actual opcode interpretation is a little
-    strange; there are lots of ``header'' files in the
-    opcode_handlers directory that are not really header
-    files at all. These files all contain code for handling
-    opcode parsing and interpretation; with over 150
-    opcodes, having all of the code to handle these in one
-    file would be excessive and difficult to navigate, and
-    dispatching out to functions to handle each opcode
-    carries unnecessary overhead in what should be the
-    tightest loop in the project. Thus, each of these header
-    files is #included in emu.c in the middle of a switch
-    statement, and gets access to the local scope within the
-    main_loop function. It's weird but it gets the job done,
-    and is the least bad of all considered options.
+    to I/O handlers (via `io.c').
 
     The opcode handlers all use convenience functions
     defined in `functions.h', most of which are for the
@@ -117,7 +66,7 @@ Reading the source
     written to and where we raise an interrupt if we've
     gotten input from stdin.
 
-    `generate_debug_names.py' reads the `opcodes.h' header
+    `generate_debug_names.pl' reads the `opcodes.h' header
     and generates `debug-names.h', which contains a mapping
     from opcode to a string representation of that opcode.
     It's only used when dumping CPU state, either because
@@ -132,12 +81,14 @@ Reading the source
     printfs.
 
 TODO:
-    - support buffered input, where the program can read
-      more than one input character at once.
-    - graphics? definitely more I/O.
+    - add more devices (memory banking, keyboard input, ...)
 
 THANKS:
-    - voltagex on Github for sending me a patch to improve
+    - voltagex on Github for sending a patch to improve
       the sample_programs readme.
-    - anatoly on HN for suggesting I add a bit on source
+    - anatoly on HN for suggesting to add a bit on source
       code structure to the README.
+
+USEFUL 6502 TOOLS:
+  [xa   : 6502 assembler](http://www.floodgap.com/retrotech/xa/)
+  [cc65 : 6502 C compiler](https://github.com/oliverschmidt/cc65)
