@@ -28,4 +28,5 @@ halt:
   .byt $FF
 
 ; Padding
-.dsb 959
+padEnd:
+  .dsb (1024-padEnd)
