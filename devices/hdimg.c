@@ -61,12 +61,10 @@ static void sysCommand(ioDevice *device, u8 data)
       break;
 
     case IO_CMD_PID:
-      device->data[0] = 'H';
-      device->data[1] = 'D';
-      device->data[2] = 'I';
-      device->data[3] = 'M';
-      device->data[4] = 'G';
-      device->data[5] = 0x00;
+      device->data[0] = 'D';
+      device->data[1] = 'I';
+      device->data[2] = 'M';
+      device->data[3] = 'G';
       break;
 
     case IO_CMD_NAME:
