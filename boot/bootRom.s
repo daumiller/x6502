@@ -152,7 +152,6 @@ L0007:
   lda #$10           : ldy #1 : sta ($08),Y ; size    - 16 bytes
   lda #STOR_CMD_READ : ldy #0 : sta ($08),Y ; command - read
   ; memcpy
-  ldy #0
   lda ($06),Y : sta ($00),Y : iny    :    lda ($06),Y : sta ($00),Y : iny
   lda ($06),Y : sta ($00),Y : iny    :    lda ($06),Y : sta ($00),Y : iny
   lda ($06),Y : sta ($00),Y : iny    :    lda ($06),Y : sta ($00),Y : iny
@@ -162,8 +161,8 @@ L0007:
   lda ($06),Y : sta ($00),Y : iny    :    lda ($06),Y : sta ($00),Y : iny
   lda ($06),Y : sta ($00),Y : iny    :    lda ($06),Y : sta ($00),Y : iny
   ; increment writing pointer
-  lda $0000 : adc #1 : sta $0000 : bcc L0008
-  lda $0001 : adc #1 : sta $0001
+  lda $0000 : adc #16 : sta $0000 : bcc L0008
+  lda $0001 : adc #1  : sta $0001
 L0008:
   ; increment block counter
   lda $00FC : adc #1 : sta $00FC : bcc L0009

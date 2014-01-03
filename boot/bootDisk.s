@@ -14,14 +14,16 @@
 .dsb $A
 
 ; Boot Code
-ldy #1 : lda #$55 : sta ($04),Y
-ldy #0 : lda #$10 : sta ($04),Y
-ldy #1 : lda #$50 : sta ($04),Y
-ldy #0 : lda #$10 : sta ($04),Y
-ldy #1 : lda #$21 : sta ($04),Y
-ldy #0 : lda #$10 : sta ($04),Y
-ldy #1 : lda #$0A : sta ($04),Y
-ldy #0 : lda #$10 : sta ($04),Y
+  ldy #1 : lda #$55 : sta ($04),Y
+  ldy #0 : lda #$10 : sta ($04),Y
+  ldy #1 : lda #$50 : sta ($04),Y
+  ldy #0 : lda #$10 : sta ($04),Y
+  ldy #1 : lda #$21 : sta ($04),Y
+  ldy #0 : lda #$10 : sta ($04),Y
+  ldy #1 : lda #$0A : sta ($04),Y
+  ldy #0 : lda #$10 : sta ($04),Y
+halt:
+  .byt $FF
 
 ; Padding
-.dsb 960
+.dsb 959
