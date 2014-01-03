@@ -90,5 +90,5 @@ THANKS:
       code structure to the README.
 
 USEFUL 6502 TOOLS:
-  [xa   : 6502 assembler](http://www.floodgap.com/retrotech/xa/)
-  [cc65 : 6502 C compiler](https://github.com/oliverschmidt/cc65)
+  xa   : 6502 assembler  : http://www.floodgap.com/retrotech/xa/
+  cc65 : 6502 C compiler : https://github.com/oliverschmidt/cc65
