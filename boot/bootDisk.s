@@ -1,3 +1,5 @@
+#include "boot/boot.h"
+
 ; Boot Signature
 .byt $55
 .byt $AA
@@ -14,14 +16,14 @@
 .dsb $A
 
 ; Boot Code
-  ldy #1 : lda #$55 : sta ($04),Y
-  ldy #0 : lda #$10 : sta ($04),Y
-  ldy #1 : lda #$50 : sta ($04),Y
-  ldy #0 : lda #$10 : sta ($04),Y
-  ldy #1 : lda #$21 : sta ($04),Y
-  ldy #0 : lda #$10 : sta ($04),Y
-  ldy #1 : lda #$0A : sta ($04),Y
-  ldy #0 : lda #$10 : sta ($04),Y
+  ldy #1 : lda #$55 : sta (ZPCONVID),Y ; 'U'
+  ldy #0 : lda #$10 : sta (ZPCONVID),Y
+  ldy #1 : lda #$50 : sta (ZPCONVID),Y ; 'P'
+  ldy #0 : lda #$10 : sta (ZPCONVID),Y
+  ldy #1 : lda #$21 : sta (ZPCONVID),Y ; '!'
+  ldy #0 : lda #$10 : sta (ZPCONVID),Y
+  ldy #1 : lda #$0A : sta (ZPCONVID),Y ; '\n'
+  ldy #0 : lda #$10 : sta (ZPCONVID),Y
 halt:
   .byt $FF
 

@@ -30,9 +30,9 @@ convid: object/hdimg.o
 object/hdimg.o : devices/hdimg.c devices/hdimg.h devices/ioClassStorage.h machine/io.h
 	$(CC) $(COPTS) -c devices/hdimg.c -o object/hdimg.o
 
-bootRom: boot/bootRom.s
+bootRom: boot/bootRom.s boot/boot.h
 	./xa -bt0 boot/bootRom.s -o boot.rom
-bootDisk: boot/bootDisk.s
+bootDisk: boot/bootDisk.s boot/boot.h
 	./xa -bt0 boot/bootDisk.s -o hda.img
 
 object/%.o : machine/%.c
