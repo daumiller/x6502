@@ -1,0 +1,28 @@
+org(0)->jmp(768)
+...
+org(768)->startup
+ioCmd(0,IOC_CMD_COUNT)
+find CONVID
+store convid device slot ((index+1)<<4) in zp at constant location
+print startup message
+find first STORAGE device, that reports BOOTABLE
+if none found, display error, halt
+if found, load and jump boot image
+
+---------
+
+PAGE 00    : ZERO_PAGE
+PAGE 01    : STACK
+PAGE 02    : IO
+PAGE 03-12 : BOOT_ROM    (4 KiB)
+PAGE 13-7F : BOOT_SECTOR (up to 27904 B / 1744 16-byte blocks)
+PAGE 80-FF : unreserved during boot
+
+---------
+
+AA 55 - Boot Signature
+NN NN - Boot Block Size (in 16-byte blocks)
+NN NN - Boot Block Offset (from origin of disk, in bytes (max 64 KiB))
+.. ..
+XX XX - Boot Block
+.. ..
