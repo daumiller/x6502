@@ -69,7 +69,7 @@ static inline void sub(cpu *m, u16 r1) {
     r1 = m->a - r1 - !get_flag(m, FLAG_CARRY);
     set_flag(m, FLAG_OVERFLOW, 0xFF00 & r1);
   }
-  set_flag(m, FLAG_CARRY, r1);
+  set_flag(m, FLAG_CARRY, !(r1 & 0x8000));
   set_flag(m, FLAG_NEGATIVE, r1 & 0x80);
   set_flag(m, FLAG_ZERO, r1 == 0);
   m->a = r1;
