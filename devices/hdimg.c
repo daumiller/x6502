@@ -110,6 +110,7 @@ static void usrCommand(ioDevice *device, u8 data)
                   (((u32)device->data[3])<<16) |
                   (((u32)device->data[4])<<24) ;
         fseek(fimg, pos, SEEK_SET);
+//printf("hdimg.seek(%u)\n", pos);
       }
       break;
 
@@ -133,7 +134,8 @@ static void usrCommand(ioDevice *device, u8 data)
           if((cur = fread(device->data+tot, 1, req-tot, fimg)) == 0) break;
           tot += cur;
         }
-        //for(int i=0; i<req; i++) printf("%02X ", device->data[i]); printf("\n");
+//printf("STOR_CMD_READ(%u)\n  ",req);
+//for(u32 i=0; i<req; i++) printf("%02X ", device->data[i]); printf("\n");
       }
       break;
 

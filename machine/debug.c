@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "debug.h"
 #include "debug-names.h"
 
@@ -7,6 +8,17 @@
 
 void dump_cpu(cpu *m)
 {
+  /*
+  u8 *ptr = m->ram + (m->x | (m->y<<8));
+  printf("%02X %02X ] %02X %02X %02X %02X %02X %02x %02X %02X "
+                     "%02X %02X %02X %02X %02X %02x %02X %02X\n", m->x, m->y,
+                     ptr[ 0], ptr[ 1], ptr[ 2], ptr[ 3],
+                     ptr[ 4], ptr[ 5], ptr[ 6], ptr[ 7],
+                     ptr[ 8], ptr[ 9], ptr[10], ptr[11],
+                     ptr[12], ptr[13], ptr[14], ptr[15]);
+  return; 
+  */
+
   init_names();
 
   printf("pc %04X\nx %02X y %02X sp %02X sr %02X ac %02X", m->pc, m->x, m->y, m->sp, m->sr, m->a);

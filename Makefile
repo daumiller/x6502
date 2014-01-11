@@ -47,15 +47,17 @@ object/banking.o : devices/banking.c devices/banking.h machine/io.h
 
 bootRom: boot/bootRom.s boot/boot.h
 	./xa -bt0 boot/bootRom.s -o boot.rom
-bootDisk: boot/bootDisk.s boot/boot.h
-	./xa -bt0 boot/bootDisk.s -o hda.img
+bootImg: boot/bootImg.s boot/boot.h
+	./xa -bt4864 boot/bootImg.s -o boot.img
 
 #===============================================================================
 
 object/main.o : main.c
+	mkdir -p object
 	$(CC) $(COPTS) -c $^ -o $@
 
 object/%.o : machine/%.c
+	mkdir -p object
 	$(CC) $(COPTS) -c $^ -o $@
 
 #===============================================================================

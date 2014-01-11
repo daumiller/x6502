@@ -4,7 +4,8 @@ cc65
 cl65
 xa
 boot.rom
-hda.img
+boot.img
+hda.dmg
 object/*
 machine/debug-names.h
 .DS_Store

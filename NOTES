@@ -17,12 +17,3 @@ PAGE 02    : IO
 PAGE 03-12 : BOOT_ROM    (4 KiB)
 PAGE 13-7F : BOOT_SECTOR (up to 27904 B / 1744 16-byte blocks)
 PAGE 80-FF : unreserved during boot
-
----------
-
-AA 55 - Boot Signature
-NN NN - Boot Block Size (in 16-byte blocks)
-NN NN - Boot Block Offset (from origin of disk, in bytes (max 64 KiB))
-.. ..
-XX XX - Boot Block
-.. ..

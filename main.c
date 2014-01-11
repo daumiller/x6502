@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   m->pc = baseAddr;
   fclose(fin);
 
-  fin = fopen("hda.img", "r+b");
+  fin = fopen("hda.dmg", "r+b");
   deviceStart_hdimg(fin);
   deviceStart_convid();
   deviceStart_keyboard();
